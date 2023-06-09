@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks:
+    - name: site | hello world
+      shell: echo "Hi! Ansible is working"
+      register: shell_output
+
+    - name: Display output
+      debug:
+        var: shell_output.stdout
