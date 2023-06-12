@@ -7,6 +7,12 @@ ansible-playbook -i "localhost," playbook.yml
 
 - or you can pass in one node that we want to target
 
-## Otherwise we can setup an inventory.ini file later it is like a spec sheet.
+## Downloads
+- 4 types of OS, need a different case for each
 
-In Ansible, an inventory is a list of target hosts or nodes on which Ansible will execute tasks. The inventory can be defined in various formats, including INI-style, YAML, or dynamically generated using scripts or external sources.
+## Complementary Config files alongside playbook
+- Otherwise we can setup an *.ini file (spec sheet) to define hosts groups
+- In Ansible, an inventory is a list of target hosts or nodes on which Ansible will execute tasks. The inventory can be defined in various formats, including INI-style, YAML, or dynamically generated using scripts or external sources.
+
+##### Ansible background
+- '-' means order

@@ -1,10 +1,21 @@
 ---
-- hosts: localhost
+- name: Install Python
+  hosts: localhost
+  become: true
   tasks:
-    - name: site | hello world
+    - name: hello world
       shell: echo "Hi! Ansible is working"
       register: shell_output
 
     - name: Display output
       debug:
         var: shell_output.stdout
+
+    - name: run bash script
+      script: placeholder.sh
+
+    - name: Install Python on macOS
+      homebrew:
+        name: python
+        state: present
+      when: ansible_os_family == 'Darwin'
