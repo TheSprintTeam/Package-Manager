@@ -1,8 +1,15 @@
 ---
-- name: Install Python
-  hosts: localhost
+- name: Basic Playbook
+  hosts: my_host
+  
   become: true
+  gather_facts: true
+
   tasks:
+    - name: give permission
+      shell: chmod 0400 playbook.yml
+      register: shell_output
+
     - name: hello world
       shell: echo "Hi! Ansible is working"
       register: shell_output
@@ -11,11 +18,29 @@
       debug:
         var: shell_output.stdout
 
-    - name: run bash script
-      script: placeholder.sh
+    # - name: run bash script
+    #   script: placeholder.sh
 
     - name: Install Python on macOS
       homebrew:
         name: python
         state: present
+        install_path: /Users/Omega/dev/sprint/Package-Manager
       when: ansible_os_family == 'Darwin'
+      register: install_result
+
+    - name: Display Installation Result
+      debug:
+        var: install_result
+
+    # - name: Install Homebrew
+    #   become: yes
+    #   homebrew_install:
+    #     name: Homebrew
+    #     state: latest
+
+    # - name: Install PostgreSQL
+    #   become: yes
+    #   homebrew:
+    #     name: postgresql
+    #     state: present
