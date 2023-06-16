@@ -1,31 +1,19 @@
 ---
 - name: Basic Playbook
-  hosts: my_host
+  hosts: hosts
   
-  become: true
+  become: false
   gather_facts: true
 
   tasks:
-    - name: give permission
-      shell: chmod 0400 playbook.yml
-      register: shell_output
 
-    - name: hello world
-      shell: echo "Hi! Ansible is working"
-      register: shell_output
+    - name: Ping the hosts
+      ping:
 
-    - name: Display output
-      debug:
-        var: shell_output.stdout
-
-    # - name: run bash script
-    #   script: placeholder.sh
-
-    - name: Install Python on macOS
+    - name: Install mysql on macOS
       homebrew:
-        name: python
+        name: mysql
         state: present
-        install_path: /Users/Omega/dev/sprint/Package-Manager
       when: ansible_os_family == 'Darwin'
       register: install_result
 
@@ -33,14 +21,20 @@
       debug:
         var: install_result
 
+    - name: Uninstall mysql on macOS
+      homebrew:
+        name: mysql
+        state: absent
+      when: ansible_os_family == 'Darwin'
+      register: uninstall_result
+
+    - name: Display Uninstallation Result
+      debug:
+        var: uninstall_result
+
     # - name: Install Homebrew
     #   become: yes
     #   homebrew_install:
     #     name: Homebrew
     #     state: latest
 
-    # - name: Install PostgreSQL
-    #   become: yes
-    #   homebrew:
-    #     name: postgresql
-    #     state: present

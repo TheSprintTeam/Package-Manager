@@ -11,13 +11,11 @@ RUN apt-get update && apt-get install -y \
 RUN pip install ansible
 
 # Copy your Ansible playbook and inventory file to the container
-COPY playbook.yml /ansible/playbook.yml
-COPY inventory.ini /ansible/inventory.ini
-COPY pass /ansible/pass
-COPY remo.sh /ansible/remo.sh
+COPY . /ansible
 
 # Set the working directory
 WORKDIR /ansible
 
 # Run the Ansible playbook
-CMD ["bash", "remo.sh"]
+#CMD ["bash", "remo.sh"]
+CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
