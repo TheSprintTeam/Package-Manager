@@ -1,0 +1,40 @@
+---
+- name: Basic Playbook
+  hosts: hosts
+  
+  become: false
+  gather_facts: true
+
+  tasks:
+
+    - name: Ping the hosts
+      ping:
+
+    - name: Install mysql on macOS
+      homebrew:
+        name: mysql
+        state: present
+      when: ansible_os_family == 'Darwin'
+      register: install_result
+
+    - name: Display Installation Result
+      debug:
+        var: install_result
+
+    - name: Uninstall mysql on macOS
+      homebrew:
+        name: mysql
+        state: absent
+      when: ansible_os_family == 'Darwin'
+      register: uninstall_result
+
+    - name: Display Uninstallation Result
+      debug:
+        var: uninstall_result
+
+    # - name: Install Homebrew
+    #   become: yes
+    #   homebrew_install:
+    #     name: Homebrew
+    #     state: latest
+
