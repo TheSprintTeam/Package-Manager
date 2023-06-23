@@ -1,3 +1,5 @@
+# Specify group_id arg 
+ARG group_id
 # Current build sprintapp:1.0
 FROM python:3.9-slim
 
@@ -8,8 +10,8 @@ RUN apt-get update && apt-get install -y \
     sshpass \
  && rm -rf /var/lib/apt/lists/* 
 
-RUN pip install ansible
-
+RUN pip install ansible \
+    pymongo
 # Copy your Ansible playbook and inventory file to the container
 COPY . /ansible
 
@@ -17,5 +19,6 @@ COPY . /ansible
 WORKDIR /ansible
 
 # Run the Ansible playbook
-#CMD ["bash", "remo.sh"]
-CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
+
+#CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
+CMD ["bash", "installUsingPlaybook.sh", "-g" , "1"]

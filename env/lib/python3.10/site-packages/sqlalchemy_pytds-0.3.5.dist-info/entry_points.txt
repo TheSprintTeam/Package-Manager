@@ -1,0 +1,2 @@
+[sqlalchemy.dialects]
+mssql.pytds = sqlalchemy_pytds.dialect:MSDialect_pytds

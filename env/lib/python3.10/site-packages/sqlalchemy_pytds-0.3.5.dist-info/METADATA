@@ -1,0 +1,23 @@
+Metadata-Version: 2.1
+Name: sqlalchemy-pytds
+Version: 0.3.5
+Summary: A Microsoft SQL Server TDS connector for SQLAlchemy.
+Home-page: https://github.com/m32/sqlalchemy-tds
+Author: Grzegorz Makarewicz
+Author-email: mak@trisoft.com.pl
+License: MIT
+Keywords: SQLAlchemy Microsoft SQL Server
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Topic :: Database :: Front-Ends
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: python-tds
+Requires-Dist: SQLAlchemy
+
+A Microsoft SQL Server TDS connector for SQLAlchemy.
