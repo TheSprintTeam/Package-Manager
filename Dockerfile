@@ -17,5 +17,4 @@ COPY . /ansible
 WORKDIR /ansible
 
 # Run the Ansible playbook
-CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml", "-e", "technologies_list=['mysql, terraform']"]
-# CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
+CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml", ">", "output.txt"]
