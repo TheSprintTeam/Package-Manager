@@ -5,46 +5,50 @@
   gather_facts: true
 
   vars:
-    technologies_to_install: "{{ technologies_list }}"
+    jsondata: "{{ lookup('file', 'payload.json') | from_json }}"
+    technologies_to_install: "{{ jsondata.technologies }}"
 
   tasks:
     - name: Ping the hosts
       ping:
 
-    # - name: Install Homebrew
-    #   raw: "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    - name: Print variable
+      ansible.builtin.debug:
+        var: jsondata
 
     - name: print technologies
-      debug:
-        msg: "{{ item }}"
+      ansible.builtin.debug:
+        var: item
       loop: "{{ technologies_to_install }}"
     
-    - name: Install technologies on Darwin
-      package:
-        name: "{{ item }}"
-        state: present
-      loop: "{{ technologies_to_install }}"
+    # - name: Install Homebrew
+    #   raw: "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    # - name: Install technologies on Darwin
+    #   package:
+    #     name: "{{ item }}"
+    #     state: present
+    #   loop: "{{ technologies_to_install }}"
 
-    - name: Print install status
-      debug:
-        msg: "Install status: {{ install_output }}"
+    # - name: Print install status
+    #   debug:
+    #     msg: "Install status: {{ install_output }}"
 
-    - name: Uninstall technologies on Darwin
-      package:
-        name: "{{ item }}"
-        state: absent
-      loop: "{{ technologies_to_install }}"
-      register: uninstall_output
+    # - name: Uninstall technologies on Darwin
+    #   package:
+    #     name: "{{ item }}"
+    #     state: absent
+    #   loop: "{{ technologies_to_install }}"
+    #   register: uninstall_output
 
-    - name: Print uninstall status
-      debug:
-        msg: "Uninstall status: {{ uninstall_output }}"
+    # - name: Print uninstall status
+    #   debug:
+    #     msg: "Uninstall status: {{ uninstall_output }}"
 
-    - name: Print install output
-      debug:
-        var: install_output.stdout_lines
+    # - name: Print install output
+    #   debug:
+    #     var: install_output.stdout_lines
 
-    - name: Print uninstall output
-      debug:
-        var: uninstall_output.stdout_lines
-
+    # - name: Print uninstall output
+    #   debug:
+    #     var: uninstall_output.stdout_lines
