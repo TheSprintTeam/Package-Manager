@@ -1,4 +1,4 @@
-# Current build sprintapp:1.0
+# Current build sprintapp:2.0
 FROM python:3.9-slim
 
 # Install Ansible and other dependencies
@@ -17,5 +17,4 @@ COPY . /ansible
 WORKDIR /ansible
 
 # Run the Ansible playbook
-#CMD ["bash", "remo.sh"]
-CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
+CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml", ">", "output.txt"]
