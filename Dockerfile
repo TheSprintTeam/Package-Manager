@@ -16,5 +16,9 @@ COPY . /ansible
 # Set the working directory
 WORKDIR /ansible
 
-# Run the Ansible playbook
-CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml", ">", "output.txt"]
+# Install Flask for handling HTTP requests
+RUN pip install flask
+
+# Run the Flask app
+CMD ["python", "app.py"]
+# CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml", ">", "output.txt"]
