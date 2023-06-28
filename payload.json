@@ -1,9 +1,0 @@
-{
-    "technologies": [
-        "mysql", 
-        "terraform",
-        "node",
-        "rust",
-        "kafka"
-    ]
-}
