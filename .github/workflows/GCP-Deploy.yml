@@ -10,7 +10,7 @@ jobs:
 
     deploy:
 
-        name: Setup Gcloud Account
+        name: Run pipeline
         runs-on: ubuntu-latest
         env:
           IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}
@@ -32,7 +32,7 @@ jobs:
         - name: Build Docker image
           run: docker build . -t $IMAGE_NAME
 
-        - name: Test Docker image
+        - name: Run Unittests on Docker image
           run: docker run --rm $IMAGE_NAME python tests.py
 
         - name: Push Docker image
