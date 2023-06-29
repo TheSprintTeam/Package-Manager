@@ -1,9 +1,9 @@
 import unittest
+from unittest import mock
 import json
 import subprocess
 from flask import Flask
 from flask.testing import FlaskClient
-import mock
 
 from app import app
 
