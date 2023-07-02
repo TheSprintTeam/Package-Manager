@@ -18,7 +18,6 @@ COPY . /ansible
 # Set the working directory
 WORKDIR /ansible
 
-# Run the Ansible playbook
 
-#CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
-CMD ["bash", "installUsingPlaybook.sh", "-g" , "1"]
+#Use Inventory In DB to create inventory files and run them
+CMD ["python", "inventoryFetcher.py", group_id]

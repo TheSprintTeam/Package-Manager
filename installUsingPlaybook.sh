@@ -2,9 +2,9 @@
 while getopts g: flag
 do
     case "${flag}" in
-        g) group_id=${OPTARG};;
+        g) ip=${OPTARG};;
         
     esac
 done
-python inventoryFetcher.py $group_id inventory.ini
-ansible-playbook -i inventory.ini playbook.yml
+
+ansible-playbook -i inventories/$ip.ini playbook.yml

@@ -37,12 +37,12 @@ db.hosts.insertMany([
            
     },
     {
-        "group_id" : 2,
-        "host_id" : 3,
+        "group_id" : 1,
+        "host_id" : 4,
         "hostInfo":{
-            "host" : "host3",
-            "user" : "3",
-            "password" : "pass3"
+            "host" : "192.168.1.66",
+            "user" : "hardshah",
+            "password" : "titanic2"
         }
            
     }
