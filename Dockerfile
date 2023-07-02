@@ -1,5 +1,3 @@
-# Specify group_id arg 
-ARG group_id
 # Current build sprintapp:1.0
 FROM python:3.9-slim
 
@@ -17,7 +15,7 @@ COPY . /ansible
 
 # Set the working directory
 WORKDIR /ansible
+# Specify group_id arg 
 
-
-#Use Inventory In DB to create inventory files and run them
-CMD ["python", "inventoryFetcher.py", group_id]
+#CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
+ENTRYPOINT [ "python","inventoryFetcher.py"]
