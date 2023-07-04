@@ -20,8 +20,8 @@ def parseGroupToInventoryAndRunPlaybook(group):
         strings = hostStrings(host)
         with open("inventories/" +strings.ip + ".ini", "w") as vars:
             vars.write(hostGroup+strings.ip+strings.host_vars)
-        subprocess.run(["bash", "installUsingPlaybook.sh",
-                "-g", strings.ip])
+            subprocess.run(['ansible-playbook', '-i', "inventories/" +strings.ip + ".ini", 'playbook.yml'], cwd='/ansible')
+
     
     
 #using connection string to access db

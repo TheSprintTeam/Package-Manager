@@ -9,13 +9,15 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/* 
 
 RUN pip install ansible \
-    pymongo
+    pymongo \
+    flask
+
 # Copy your Ansible playbook and inventory file to the container
 COPY . /ansible
 
 # Set the working directory
 WORKDIR /ansible
 # Specify group_id arg 
-
+RUN ["python", "app.py"]
 #CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
 ENTRYPOINT [ "python","inventoryFetcher.py"]

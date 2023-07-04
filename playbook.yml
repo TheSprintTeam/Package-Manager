@@ -1,40 +1,54 @@
 ---
-- name: Basic Playbook
+- name: Dynamic Playbook V0.1
   hosts: hosts
-  
   become: false
   gather_facts: true
 
-  tasks:
+  vars:
+    jsondata: "{{ lookup('file', 'payload.json') | from_json }}"
+    technologies_to_install: "{{ jsondata.technologies }}"
 
+  tasks:
     - name: Ping the hosts
       ping:
 
-    - name: Install mysql on macOS
-      homebrew:
-        name: mysql
-        state: present
-      when: ansible_os_family == 'Darwin'
-      register: install_result
+    - name: Print variable
+      ansible.builtin.debug:
+        var: jsondata
 
-    - name: Display Installation Result
-      debug:
-        var: install_result
-
-    - name: Uninstall mysql on macOS
-      homebrew:
-        name: mysql
-        state: absent
-      when: ansible_os_family == 'Darwin'
-      register: uninstall_result
-
-    - name: Display Uninstallation Result
-      debug:
-        var: uninstall_result
-
+    - name: print technologies
+      ansible.builtin.debug:
+        var: item
+      loop: "{{ technologies_to_install }}"
+    
     # - name: Install Homebrew
-    #   become: yes
-    #   homebrew_install:
-    #     name: Homebrew
-    #     state: latest
+    #   raw: "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    # - name: Install technologies on Darwin
+    #   package:
+    #     name: "{{ item }}"
+    #     state: present
+    #   loop: "{{ technologies_to_install }}"
 
+    # - name: Print install status
+    #   debug:
+    #     msg: "Install status: {{ install_output }}"
+
+    # - name: Uninstall technologies on Darwin
+    #   package:
+    #     name: "{{ item }}"
+    #     state: absent
+    #   loop: "{{ technologies_to_install }}"
+    #   register: uninstall_output
+
+    # - name: Print uninstall status
+    #   debug:
+    #     msg: "Uninstall status: {{ uninstall_output }}"
+
+    # - name: Print install output
+    #   debug:
+    #     var: install_output.stdout_lines
+
+    # - name: Print uninstall output
+    #   debug:
+    #     var: uninstall_output.stdout_lines
