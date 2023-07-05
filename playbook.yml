@@ -17,16 +17,16 @@
   tasks:
     - name: Gather Facts
       setup:
+    
+    - name: Check operating system
+      fail:
+        msg: "This playbook is intended for macOS operating system only."
+      when: ansible_facts['system'] != 'Darwin'
 
-    # - name: Check operating system
-    #   fail:
-    #     msg: "This playbook is intended for macOS operating system only."
-    #   when: ansible_facts['ansible_system'] != 'Darwin'
-
-    # - name: Check architecture
-    #   fail:
-    #     msg: "This playbook is intended for non-M1 ARM architecture."
-    #   when: ansible_facts['ansible_processor'] == 'aarch64'
+    - name: Check architecture
+      fail:
+        msg: "This playbook is intended for non-M1 ARM architecture."
+      when: ansible_facts['processor'] == 'aarch64'
 
     - name: Ping the hosts
       ping:
@@ -42,23 +42,24 @@
 
     - name: Determine package manager
       set_fact:
-        package_manager: "{{ item }}"
-      loop: "{{ package_managers }}"
-      when: package_manager.command is defined and package_manager.command is not none
+        package_manager: "{{ ansible_facts.pkg_mgr }}"
+      when: ansible_facts.pkg_mgr is defined
+    
+    - name: Debug package manager
+      debug:
+        var: package_manager
 
-    - name: Install package manager
+    - name: Install package managers if ansible_facts['pkg_mgr'] does not exist
       block:
         - name: Debug package manager
           debug:
             var: package_manager
-          when: package_manager is defined
 
         - name: Install package manager
           raw: "{{ package_manager.install_command }}"
           register: install_output
           retries: 3
           delay: 5
-          when: package_manager is defined
           failed_when: install_output is failed
 
         - name: Fail if package manager installation failed
@@ -70,33 +71,38 @@
           stat:
             path: "{{ package_manager.command }}"
           register: package_manager_verification
-          when: package_manager is defined
 
         - name: Debug package manager verification
           debug:
-            var: package_manager_verification
-
+            var: package_manager
 
         - name: Fail if package manager not found
           fail:
             msg: "Package manager ({{ package_manager.name }}) not found on the system."
-          when: not package_manager_verification.stat.exists
+          when: not package_manager_verification.skipped
 
-    - name: Install technologies using Homebrew
-      become: true
-      shell: "{{ package_manager.command }} install {{ item }}"
-      loop: "{{ technologies_to_install }}"
-      register: install_output
-      ignore_errors: true
-      when: package_manager.name == 'homebrew'
+        - name: Set default package manager
+          set_fact:
+            ansible_facts:
+              pkg_mgr: "{{ package_manager }}"
 
-    - name: Install technologies using MacPorts
+      when: package_manager is undefined
+
+    - name: Install technologies with Homebrew
       become: true
-      shell: "{{ package_manager.command }} install {{ item }}"
+      homebrew:
+        name: "{{ item }}"
+        state: present
       loop: "{{ technologies_to_install }}"
-      register: install_output
-      ignore_errors: true
-      when: package_manager.name == 'macports'
+      when: package_manager == 'homebrew'
+
+    - name: Install technologies with MacPorts
+      become: true
+      macports:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ technologies_to_install }}"
+      when: package_manager == 'macports'
 
     - name: Print installation summary
       debug:
