@@ -1,9 +1,7 @@
 import pymongo
 import sys
 import subprocess
-
-## grab group id arg from CLI
-group_id = int(sys.argv[1])
+import json
 
 ## methods to parse host data
 class hostStrings:
@@ -20,14 +18,17 @@ def parseGroupToInventoryAndRunPlaybook(group):
         strings = hostStrings(host)
         with open("inventories/" +strings.ip + ".ini", "w") as vars:
             vars.write(hostGroup+strings.ip+strings.host_vars)
-            subprocess.run(['ansible-playbook', '-i', "inventories/" +strings.ip + ".ini", 'playbook.yml'], cwd='/ansible')
-
+        subprocess.run(['ansible-playbook', '-i', "inventories/" + strings.ip + ".ini", 'playbook.yml'])
     
     
 #using connection string to access db
 client = pymongo.MongoClient('mongodb+srv://h64shah:titanic2@sprint-cluster.lneibho.mongodb.net/')
 db = client['inventory']
 collection = db['hosts']
+
+#group_id from payload
+with open('payload.json', "r") as f:
+    group_id = int(json.load(f)["group_id"])
 
 #query for group using group_id
 group = list(collection.find({"group_id" : group_id }))

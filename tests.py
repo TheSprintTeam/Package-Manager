@@ -1,5 +1,12 @@
-from app import app
 
+import unittest
+from unittest import mock
+import json
+import subprocess
+from flask import Flask
+from flask.testing import FlaskClient
+
+from app import app
 class APITestCase(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
@@ -8,7 +15,8 @@ class APITestCase(unittest.TestCase):
                 "rust",
                 "terraform",
                 "ansible"
-            ]
+            ],
+            "group_id" : "1"
         }
 
     @mock.patch('subprocess.call')

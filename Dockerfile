@@ -18,6 +18,6 @@ COPY . /ansible
 # Set the working directory
 WORKDIR /ansible
 # Specify group_id arg 
-RUN ["python", "app.py"]
+
 #CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
-ENTRYPOINT [ "python","inventoryFetcher.py"]
+CMD ["python", "app.py"]
