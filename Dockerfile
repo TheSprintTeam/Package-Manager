@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install ansible \
     pymongo \
-    flask
+    flask\
+    bson
 
 # Copy your Ansible playbook and inventory file to the container
 COPY . /ansible

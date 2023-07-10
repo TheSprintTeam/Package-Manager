@@ -2,7 +2,7 @@ import pymongo
 import sys
 import subprocess
 import json
-
+from bson.objectid import ObjectId
 ## methods to parse host data
 class hostStrings:
 
@@ -22,16 +22,16 @@ def parseGroupToInventoryAndRunPlaybook(group):
     
     
 #using connection string to access db
-client = pymongo.MongoClient('')
-db = client['inventory']
-collection = db['hosts']
+client = pymongo.MongoClient('mongodb+srv://sprintteam03:Dasphy03@dev-backend-cluster.ohvhxe6.mongodb.net/?retryWrites=true&w=majority')
+db = client['sprint']
+collection = db['users']
 
 #group_id from payload
 with open('payload.json', "r") as f:
-    group_id = int(json.load(f)["group_id"])
+    user_id = int(json.load(f)["user_id"])
 
 #query for group using group_id
-group = list(collection.find({"group_id" : group_id }))
+group = list(collection.find({"user_id" : ObjectId(user_id)}))
 
 #create string of hosts and write to inventory file and run playbook
 parseGroupToInventoryAndRunPlaybook(group)
