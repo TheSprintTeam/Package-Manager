@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     sshpass \
  && rm -rf /var/lib/apt/lists/* 
 
-RUN pip install ansible pymongo  flask 
+RUN pip install ansible pymongo flask 
 
 # Copy your Ansible playbook and inventory file to the container
 COPY . /ansible
