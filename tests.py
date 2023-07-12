@@ -16,7 +16,7 @@ class APITestCase(unittest.TestCase):
                 "terraform",
                 "ansible"
             ],
-            "user_id" : ""
+            "user_id" : '64ade9f240ea4eaa1c1498b2'
         }
 
     @mock.patch('subprocess.call')
