@@ -7,20 +7,18 @@ from bson.objectid import ObjectId
 CONNECTION_STRING = 'mongodb+srv://pacmanuser:Dasphy03.@dev-backend-cluster.ohvhxe6.mongodb.net/?retryWrites=true&w=majority'
 ## methods to parse host data
 class hostStrings:
-
     def __init__(self, host):
         self.user = host["user"]
         self.ip  = host["ip"]
         self.password = host["password"]
         self.host_vars = " ansible_ssh_user="+self.user + " ansible_ssh_password=" + self.password 
 
-def parseGroupToInventoryAndRunPlaybook(group):
+def parseUserToInventoryAndRunPlaybook(host):
     hostGroup = "[hosts] \n"
-    for host in group:
-        strings = hostStrings(host)
-        with open("inventories/" +strings.ip + ".ini", "w") as vars:
-            vars.write(hostGroup+strings.ip+strings.host_vars)
-        subprocess.run(['ansible-playbook', '-i', "inventories/" + strings.ip + ".ini", 'playbook.yml'])
+    strings = hostStrings(host)
+    with open("inventory.ini", "w") as vars:
+        vars.write(hostGroup+strings.ip+strings.host_vars)
+    subprocess.run(['ansible-playbook', '-i', "inventory.ini", 'playbook.yml'])
     
     
 #using connection string to access db
@@ -37,4 +35,4 @@ with open('payload.json', "r") as f:
 user = list(collection.find({"_id" : ObjectId(user_id)}))
 
 #create string of hosts and write to inventory file and run playbook
-parseGroupToInventoryAndRunPlaybook(user)
+parseUserToInventoryAndRunPlaybook(user[0])
