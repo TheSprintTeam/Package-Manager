@@ -24,7 +24,7 @@ def index():
     
     subprocess.run(["python","inventoryFetcher.py"])
 
-    return 'Payload received and saved.'
+    return 'Payload recieved and install finished'
 
 if __name__ == '__main__':
         app.run(host='0.0.0.0')
