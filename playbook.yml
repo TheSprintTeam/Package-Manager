@@ -18,15 +18,15 @@
     - name: Gather Facts
       setup:
     
-    - name: Check operating system
-      fail:
-        msg: "This playbook is intended for macOS operating system only."
-      when: ansible_facts['system'] != 'Darwin'
+   # - name: Check operating system
+   #   fail:
+   #     msg: "This playbook is intended for macOS operating system only."
+   #   when: ansible_facts['system'] != 'Darwin'
 
-    - name: Check architecture
-      fail:
-        msg: "This playbook is intended for non-M1 ARM architecture."
-      when: ansible_facts['processor'] == 'aarch64'
+    #- name: Check architecture
+     # fail:
+      #  msg: "This playbook is intended for non-M1 ARM architecture."
+     # when: ansible_facts['processor'] == 'aarch64'
 
     - name: Ping the hosts
       ping:
