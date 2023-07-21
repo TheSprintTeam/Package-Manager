@@ -27,7 +27,7 @@ class APITestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Verify the response message
-        self.assertEqual(response.get_data(as_text=True), ''install finished'')
+        self.assertEqual(response.get_data(as_text=True), 'install finished')
 
         # Verify subprocess execution
         mock_subproc_call.assert_called_once()
