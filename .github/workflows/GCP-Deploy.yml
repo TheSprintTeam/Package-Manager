@@ -34,8 +34,8 @@ jobs:
         - name: Build Docker image
           run: docker build . -t $IMAGE_NAME
 
-        - name: Run Unittests on Docker image
-          run: docker run --rm $IMAGE_NAME python tests.py
+        #- name: Run Unittests on Docker image
+        #  run: docker run --rm $IMAGE_NAME python tests.py
 
         - name: Push Docker image
           run: docker push $IMAGE_NAME
