@@ -14,10 +14,8 @@ jobs:
         runs-on: ubuntu-latest
         env:
           IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}
-          ANSIBLE_SSH_PASSWORD: ${{ secrets.ANSIBLE_SSH_PASSWORD }}
 
         steps:
-
         - name: Login
           uses: google-github-actions/setup-gcloud@v0
           with:
@@ -39,6 +37,11 @@ jobs:
 
         - name: Push Docker image
           run: docker push $IMAGE_NAME
+          
+        - name: Set service name
+          run: |
+            SERVICE_NAME=$(echo "${{ github.repository }}" | tr / -)
+            echo "SERVICE_NAME=$SERVICE_NAME" >> $GITHUB_ENV
 
         - name: Deploy Docker image
-          run: gcloud run deploy ${{ github.repository }} --image $IMAGE_NAME --region us-central1 --platform managed
+          run: gcloud run deploy $SERVICE_NAME --image $IMAGE_NAME --region us-central1 --platform managed
