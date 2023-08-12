@@ -56,6 +56,7 @@
             var: package_manager
 
         - name: Install package manager
+          become: yes
           raw: "{{ package_manager.install_command }}"
           register: install_output
           retries: 3
@@ -89,7 +90,7 @@
       when: package_manager is undefined
 
     - name: Install technologies with Homebrew
-      become: true
+      become: yes
       homebrew:
         name: "{{ item }}"
         state: present
@@ -97,7 +98,7 @@
       when: package_manager == 'homebrew'
 
     - name: Install technologies with MacPorts
-      become: true
+      become: yes
       macports:
         name: "{{ item }}"
         state: present
