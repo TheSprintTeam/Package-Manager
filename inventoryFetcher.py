@@ -18,7 +18,7 @@ def parseUserToInventoryAndRunPlaybook(host):
     strings = hostStrings(host)
     with open("inventory.ini", "w") as vars:
         vars.write(hostGroup+strings.ip+strings.host_vars)
-    subprocess.run(['ansible-playbook', '-i', "inventory.ini", 'playbook.yml'])
+    subprocess.run(['ansible-playbook', '-i', "inventory.ini", 'playbook.yml', '--ask-become-pass'])
     
     
 #using connection string to access db
