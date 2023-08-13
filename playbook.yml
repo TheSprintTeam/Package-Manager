@@ -1,6 +1,6 @@
 ---
 - name: Dynamic Playbook V0.7
-  hosts: localhost
+  hosts: hosts
   gather_facts: true
 
   vars:
