@@ -11,14 +11,14 @@ class hostStrings:
         self.user = host["user"]
         self.ip  = host["ip"]
         self.password = host["password"]
-        self.host_vars = " ansible_ssh_user="+self.user + " ansible_ssh_password=" + self.password 
+        self.host_vars = " ansible_ssh_user="+self.user#+ " ansible_ssh_private_key_file=id_rsa" 
 
 def parseUserToInventoryAndRunPlaybook(host):
     hostGroup = "[hosts] \n"
     strings = hostStrings(host)
     with open("inventory.ini", "w") as vars:
         vars.write(hostGroup+strings.ip+strings.host_vars)
-    subprocess.run(['ansible-playbook', '-i', "inventory.ini", 'playbook.yml', '--ask-become-pass', '-vvv'])
+    subprocess.run(['ansible-playbook', '-i', "inventory.ini", 'playbook.yml', '-vvv'])
     
     
 #using connection string to access db
