@@ -4,6 +4,7 @@
   gather_facts: true
 
   vars:
+    ansible_ssh_private_key_file: id_rsa
     jsondata: "{{ lookup('file', 'payload.json') | from_json }}"
     technologies_to_install: "{{ jsondata.technologies }}"
     package_managers:
@@ -13,10 +14,18 @@
       - name: macports
         command: "/opt/local/bin/port"
         install_command: "curl -fsSL https://www.macports.org/install.sh | bash"
-
   tasks:
     - name: Gather Facts
       setup:
+      
+    - name: Prompt for sudo password on target hosts
+      shell: read -s -p "Enter your sudo password: " sudo_password && echo $sudo_password
+      register: sudo_pass_result
+      changed_when: false
+      
+    - name: Set the sudo password as a fact
+      set_fact:
+        sudo_password: "{{ sudo_pass_result.stdout }}"
     
    # - name: Check operating system
    #   fail:
@@ -44,19 +53,28 @@
       set_fact:
         package_manager: "{{ ansible_facts.pkg_mgr }}"
       when: ansible_facts.pkg_mgr is defined
+      become: true
+      become_method: sudo
+      become_user: root
+      ansible_become_pass: "{{ sudo_password }}"
     
     - name: Debug package manager
       debug:
         var: package_manager
+      
 
     - name: Install package managers if ansible_facts['pkg_mgr'] does not exist
       block:
         - name: Debug package manager
           debug:
             var: package_manager
+        
 
         - name: Install package manager
-          become: yes
+          become: true
+          become_method: sudo
+          become_user: root
+          ansible_become_pass: "{{ sudo_password }}"
           raw: "{{ package_manager.install_command }}"
           register: install_output
           retries: 3
@@ -83,6 +101,10 @@
           when: not package_manager_verification.skipped
 
         - name: Set default package manager
+          become: true
+          become_method: sudo
+          become_user: root
+          ansible_become_pass: "{{ sudo_password }}"
           set_fact:
             ansible_facts:
               pkg_mgr: "{{ package_manager }}"
@@ -90,7 +112,10 @@
       when: package_manager is undefined
 
     - name: Install technologies with Homebrew
-      become: yes
+      become: true
+      become_method: sudo
+      become_user: root
+      ansible_become_pass: "{{ sudo_password }}"
       homebrew:
         name: "{{ item }}"
         state: present
@@ -98,7 +123,10 @@
       when: package_manager == 'homebrew'
 
     - name: Install technologies with MacPorts
-      become: yes
+      become: true
+      become_method: sudo
+      become_user: root
+      ansible_become_pass: "{{ sudo_password }}"
       macports:
         name: "{{ item }}"
         state: present
