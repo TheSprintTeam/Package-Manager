@@ -48,10 +48,7 @@
       set_fact:
         package_manager: "{{ ansible_facts.pkg_mgr }}"
       when: ansible_facts.pkg_mgr is defined
-      become: true
-      become_method: sudo
-      become_user: root
-      ansible_become_pass: "{{ sudo_password }}"
+      
     
     - name: Debug package manager
       debug:
