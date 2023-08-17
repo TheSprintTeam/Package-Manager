@@ -18,14 +18,9 @@
     - name: Gather Facts
       setup:
       
-    - name: Prompt for sudo password on target hosts
-      shell: read -s -p "Enter your sudo password: " sudo_password && echo $sudo_password
-      register: sudo_pass_result
-      changed_when: false
-      
-    - name: Set the sudo password as a fact
-      set_fact:
-        sudo_password: "{{ sudo_pass_result.stdout }}"
+    - name: Execute Expect Script
+      command: /path/to/input_password.exp YourPasswordHere
+      delegate_to: localhost
     
    # - name: Check operating system
    #   fail:
