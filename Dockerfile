@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     rsync \
     sshpass \
     wget \
+    expect \
  && rm -rf /var/lib/apt/lists/* 
 
 RUN pip install ansible pymongo flask 
