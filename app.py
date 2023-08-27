@@ -1,13 +1,17 @@
-from flask import Flask, Response
+from flask import Flask, request, Response
 import json
+import subprocess
+import os
 
 app = Flask(__name__)
+
+PAYLOAD_FILE_PATH = 'payload.json'
 clients = {}  # To store connected clients
+
 @app.route('/', methods=['POST'])
 def index():
     # Get the JSON payload from the request
     payload = request.json
-
     # Check if the file exists
     if os.path.exists(PAYLOAD_FILE_PATH):
         # Clear the contents of the file
