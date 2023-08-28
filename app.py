@@ -26,7 +26,7 @@ def index():
 
     return 'install finished'
 
-@app.route('/sse/<client_id>')
+@app.route('/sse/<client_id>', methods=['POST'])
 def sse(data):
     def event_stream():
         client_id  = data["id"] 
@@ -42,7 +42,7 @@ def sse(data):
 
     return Response(event_stream(), content_type='application/x-ndjson', headers={'Cache-Control': 'no-cache'})
 
-@app.route('/close/<client_id>')
+@app.route('/close/<client_id>', methods=['POST'])
 def close(client_id):
     client_connection = clients.get(client_id)
     if client_connection:
