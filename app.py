@@ -27,10 +27,8 @@ def index():
     return 'install finished'
 
 @app.route('/sse/<client_id>', methods=['POST'])
-def sse(data):
+def sse(data, client_id):
     def event_stream():
-        client_id  = data["id"] 
-
         clients[client_id] = None  # Store the client's connection
         try:
             if clients.get(client_id) is not None:
