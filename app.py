@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, copy_current_request_context
+from flask import Flask, request, Response
 import json
 import subprocess
 import os
@@ -7,6 +7,14 @@ app = Flask(__name__)
 
 PAYLOAD_FILE_PATH = 'payload.json'
 clients = {}  # To store connected clients
+
+TEST_PAYLOAD = {
+            "technologies" : [
+                "ansible",
+                "rust",
+                "python"
+            ]
+        }
 
 @app.route('/', methods=['POST'])
 def index():
@@ -26,15 +34,13 @@ def index():
 
     return 'install finished'
 
-@app.route('/sse/<client_id>', methods=['POST'])
+@app.route('/sse/<client_id>', methods = ['GET'])
 def sse(client_id):
-    @copy_current_request_context
     def event_stream():
-        data = request.json
         clients[client_id] = None  # Store the client's connection
         try:
             if clients.get(client_id) is not None:
-                yield f"{json.dumps(data)}\n"
+                yield f"{json.dumps(TEST_PAYLOAD)}\n"
         finally:
             # Cleanup code when the client disconnects
             if client_id in clients:
@@ -42,7 +48,7 @@ def sse(client_id):
 
     return Response(event_stream(), content_type='application/x-ndjson', headers={'Cache-Control': 'no-cache'})
 
-@app.route('/close/<client_id>', methods=['POST'])
+@app.route('/close/<client_id>', methods =['POST'])
 def close(client_id):
     client_connection = clients.get(client_id)
     if client_connection:
@@ -51,6 +57,3 @@ def close(client_id):
         return 'Connection closed'
     else:
         return 'Client not found', 404
-        
-if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=8080)
