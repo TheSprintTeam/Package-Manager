@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, copy_current_request_context
 import json
 import subprocess
 import os
@@ -28,6 +28,7 @@ def index():
 
 @app.route('/sse/<client_id>', methods=['POST'])
 def sse(client_id):
+    @copy_current_request_context
     def event_stream():
         data = request.json
         clients[client_id] = None  # Store the client's connection
