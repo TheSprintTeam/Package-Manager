@@ -1,9 +1,11 @@
 from flask import Flask, request, Response
+from flask_socketio import SocketIO, join_room, leave_room
 import json
 import subprocess
 import os
 
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 PAYLOAD_FILE_PATH = 'payload.json'
 clients = {}  # To store connected clients
@@ -57,3 +59,32 @@ def close(client_id):
         return 'Connection closed'
     else:
         return 'Client not found', 404
+
+@socketio.on('connect')
+def on_connect():
+    print('Client connected')
+
+@socketio.on('join')
+def on_join(data):
+    room = data['room']
+    join_room(room)
+    print(f'Client joined room: {room}')
+
+@socketio.on('leave')
+def on_leave(data):
+    room = data['room']
+    leave_room(room)
+    print(f'Client left room: {room}')
+
+@app.route('/sendInstallEvent', methods = ["POST"])
+def sendInstallEvent():
+    data = request.json
+    print("received event")
+    room = data['room'] 
+    message = data['message']
+    # Process data and trigger event
+    # Emit an event to the specified room
+    socketio.emit('electron_event', {'message': message}, room=room)
+
+if __name__ == '__main__':
+    socketio.run(app,host='0.0.0.0', allow_unsafe_werkzeug=True)

@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     expect \
  && rm -rf /var/lib/apt/lists/* 
 
-RUN pip install ansible pymongo flask 
+RUN pip install ansible pymongo flask flask_socketio
 
 # Copy your Ansible playbook and inventory file to the container
 COPY . /ansible
